@@ -1,3 +1,16 @@
+/**
+ * @file SVG代码转换工具
+ * @version 1.0.0
+ * @description 基于微信公众号平台规则和渲染特性，实现SVG交互图文 <svg> <img> <image> 三种格式相互转换
+ * @author qiruo
+ * @copyright Copyright (c) 2026 上海意符文化传媒有限公司
+ * @license MIT License
+ * @homepage https://www.ifsvgtool.com/
+ * @demo https://www.ifsvgtool.com/code-converter
+ * @repository https://github.com/qiruoKING/svg-code-convert
+ *             https://gitee.com/forPage/svg-code-convert
+ */
+
 const svgCC = {
 
 	// =================================================================
@@ -104,7 +117,7 @@ const svgCC = {
 				reject(new Error('图片加载失败')); // 返回错误
 			};
 
-			const proxyUrl = `https://www.ifsvgtool.com/api/proxy-image.php?url=${encodeURIComponent(imageUrl)}`; // 公众号图片链接编码后传给代理接口
+			const proxyUrl = `proxy-image.php?url=${encodeURIComponent(imageUrl)}`; // 公众号图片链接编码后传给代理接口
 			img.src = proxyUrl; // 加载代理后的图片
 		});
 	},
