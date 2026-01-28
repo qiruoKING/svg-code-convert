@@ -55,7 +55,7 @@ const resultCode = svgCC.compose(tree);
 ```
 
 #### 3.2.4 三步完整流程代码演示
-引入 svg-code-convert.js 之后，在用到转换处理的部分添加：
+引入 svg-code-convert 之后，在用到转换处理的部分添加：
 ```javascript
 async function convert(code, type) {
 	const tree = svgCC.parse(code); // 第一步：解析
