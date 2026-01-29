@@ -55,7 +55,7 @@ const resultCode = svgCC.compose(tree);
 ```
 
 #### 3.2.4 三步法完整代码演示
-引入 svg-code-convert.full.js 之后，在用到转换处理的部分添加：
+引入 svg-code-convert 之后，在用到转换处理的部分添加：
 ```javascript
 async function convert(code, type) {
 	// 第一步：解析
@@ -209,7 +209,7 @@ async function convert(code, type) {
 </table>
 
 ### 4.1 calcLayer返回结果说明
-`svgCC.calcLayer`返回的层级计算结果对象包含3个核心属性，满足使用与调试需求：
+`svgCC.calcLayer`返回的层级计算结果对象包含2个核心属性，满足使用与调试需求：
 | 属性名 | 类型 | 功能说明 |
 |--------|------|----------|
 | imagesDetail | Array | 所有图片的完整层级计算明细，含图片链接、层级总分、各维度分值（底层减分/顶层加分/容器/动画/全局顺序分）、全局索引 |
