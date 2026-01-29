@@ -38,7 +38,7 @@ const svgCC = {
 	/**
 	 * 移除style中的width样式
 	 * @param {string[]} styleArr - 样式字符串数组
-	 * @returns {string} - 移除width后的合法样式字符串
+	 * @returns {string} 移除width后的合法样式字符串
 	 */
 	removeWidth: function(styleArr) {
 		// 合并样式并过滤空字符串
@@ -57,10 +57,10 @@ const svgCC = {
 	},
 
 	/**
-	 * 获取公众号图片宽高比（width/height），支持跨域/防盗链（代理接口）
+	 * 获取公众号图片宽高比（width/height），支持跨域/防盗链（需配置代理接口）
 	 * @param {string} imageUrl - 原始公众号图片链接
-	 * @returns {Promise<number>} - 宽高比，失败/超时兜底返回1
-	 * @throws {Error} - 超时/加载失败（含跨域提示）
+	 * @returns {Promise<number>} 宽高比，失败/超时兜底返回1
+	 * @throws {Error} 图片加载超时/加载失败（含跨域提示）
 	 */
 	getImageRatio: function(imageUrl) {
 		return new Promise((resolve, reject) => {
@@ -88,10 +88,10 @@ const svgCC = {
 
 			// 图片加载成功：返回宽高比
 			img.onload = function() {
-				clearTimeout(timeoutTimer); // 清除超时定时器
+				clearTimeout(timeoutTimer);
 				let ratio = 1; // 默认比值1:1
 				if (img.naturalWidth && img.naturalHeight) {
-					ratio = img.naturalWidth / img.naturalHeight; // 计算原始宽高比
+					ratio = img.naturalWidth / img.naturalHeight; // 原始宽高比
 				}
 				else {
 					// 备用方案：固定宽度计算渲染比
@@ -99,22 +99,22 @@ const svgCC = {
 					const renderWidth = img.offsetWidth;
 					const renderHeight = img.offsetHeight;
 					if (renderWidth && renderHeight) {
-						ratio = renderWidth / renderHeight; // 计算渲染宽高比
+						ratio = renderWidth / renderHeight; // 渲染宽高比
 					}
 				}
 				if (img.parentNode) {
-					img.parentNode.removeChild(img); // 移除图片
+					img.parentNode.removeChild(img);
 				}
-				resolve(ratio); // 返回宽高比
+				resolve(ratio);
 			};
 
 			// 图片加载失败：返回错误
 			img.onerror = function() {
-				clearTimeout(timeoutTimer); // 清除超时定时器
+				clearTimeout(timeoutTimer);
 				if (img.parentNode) {
-					img.parentNode.removeChild(img); // 移除图片
+					img.parentNode.removeChild(img);
 				}
-				reject(new Error('图片加载失败')); // 返回错误
+				reject(new Error('图片加载失败'));
 			};
 
 			const proxyUrl = `proxy-image.php?url=${encodeURIComponent(imageUrl)}`; // 公众号图片链接编码后传给代理接口
@@ -124,10 +124,11 @@ const svgCC = {
 
 	/**
 	 * 深度优先遍历HTML/SVG树形结构
-	 * @param {object} node - 当前节点
-	 * @param {(node, parentInfo, level) => boolean} callback - 返回true终止当前节点的子节点遍历
-	 * @param {{parentNode: object, childIndex: number} | null} [parentInfo=null] - 父节点信息
-	 * @param {number} [level=0] - 遍历层级（根节点0）
+	 * @param {object} node - 当前遍历的树形节点对象
+	 * @param {(node: object, parentInfo: object|null, level: number) => boolean} callback - 遍历回调函数，返回true终止当前节点的子节点遍历
+	 * @param {object|null} [parentInfo=null] - 父节点信息，结构 { parentNode: object, childIndex: number }
+	 * @param {number} [level=0] - 遍历层级，根节点为0
+	 * @returns {void}
 	 */
 	traverseHtmlTree: function(node, callback, parentInfo = null, level = 0) {
 		// 终止条件：节点不存在或不是对象
@@ -155,11 +156,11 @@ const svgCC = {
 	// 节点转换处理函数
 	// =================================================================
 
-    /**
-     * fo>svg → image
-     * @param {object} tree - HTML/SVG树形结构
-     * @returns {object} 转换后树形结构
-     */
+	/**
+	 * fo>svg → image
+	 * @param {object} tree - HTML/SVG树形结构
+	 * @returns {object} 转换后树形结构
+	 */
 	fosvg2image: function(tree) {
 		// 遍历收集目标节点
 		this.traverseHtmlTree(tree, (node, parentInfo) => {
@@ -211,11 +212,11 @@ const svgCC = {
 		});
 	},
 
-    /**
-     * svg → svg>image
-     * @param {object} tree - HTML/SVG树形结构
-     * @returns {object} 转换后树形结构
-     */
+	/**
+	 * svg → svg>image
+	 * @param {object} tree - HTML/SVG树形结构
+	 * @returns {object} 转换后树形结构
+	 */
 	svg2image: function(tree) {
 		// 遍历收集目标节点
 		this.traverseHtmlTree(tree, (node, parentInfo) => {
@@ -260,11 +261,11 @@ const svgCC = {
 		});
 	},
 
-    /**
-     * svg → img
-     * @param {object} tree - HTML/SVG树形结构
-     * @returns {object} 转换后树形结构
-     */
+	/**
+	 * svg → img
+	 * @param {object} tree - HTML/SVG树形结构
+	 * @returns {object} 转换后树形结构
+	 */
 	svg2img: function(tree) {
 		// 遍历收集目标节点
 		this.traverseHtmlTree(tree, (node, parentInfo) => {
@@ -290,11 +291,11 @@ const svgCC = {
 		return tree;
 	},
 
-    /**
-     * image → g>fo>img
-     * @param {object} tree - HTML/SVG树形结构
-     * @returns {object} 转换后树形结构
-     */
+	/**
+	 * image → g>fo>img
+	 * @param {object} tree - HTML/SVG树形结构
+	 * @returns {object} 转换后树形结构
+	 */
 	image2img: function(tree) {
 		// 遍历收集目标节点
 		this.traverseHtmlTree(tree, (node, parentInfo) => {
@@ -343,11 +344,11 @@ const svgCC = {
 		return tree;
 	},
 
-    /**
-     * image → g>fo>svg
-     * @param {object} tree - HTML/SVG树形结构
-     * @returns {object} 转换后树形结构
-     */
+	/**
+	 * image → g>fo>svg
+	 * @param {object} tree - HTML/SVG树形结构
+	 * @returns {object} 转换后树形结构
+	 */
 	image2svg: function(tree) {
 		// 遍历收集目标节点
 		this.traverseHtmlTree(tree, (node, parentInfo) => {
@@ -454,11 +455,11 @@ const svgCC = {
 		return tree;
 	},
 
-    /**
-     * img → svg>image
-     * @param {object} tree - HTML/SVG树形结构
-     * @returns {Promise<object>} 转换后树形结构
-     */
+	/**
+	 * img → svg>image
+	 * @param {object} tree - HTML/SVG树形结构
+	 * @returns {Promise<object>} 转换后树形结构
+	 */
 	img2image: async function(tree) {
 		const self = this;
 		const targetImgs = [];
@@ -533,11 +534,11 @@ const svgCC = {
 		return tree;
 	},
 
-    /**
-     * img → svg
-     * @param {object} tree - HTML/SVG树形结构
-     * @returns {Promise<object>} 转换后树形结构
-     */
+	/**
+	 * img → svg
+	 * @param {object} tree - HTML/SVG树形结构
+	 * @returns {Promise<object>} 转换后树形结构
+	 */
 	img2svg: async function(tree) {
 		const self = this;
 		const targetImgs = [];
@@ -595,12 +596,12 @@ const svgCC = {
 	// 拆分流程函数
 	// =================================================================
 
-    /**
-     * 解析SVG/HTML代码为树形结构
-     * @param {string} code - 原始代码
-     * @returns {object} 树形结构
-     * @throws {Error} XML解析失败（含详情）
-     */
+	/**
+	 * 解析SVG/HTML代码为树形结构（预处理→XML解析→提取资源→DOM转对象）
+	 * @param {string} code - 原始SVG/HTML代码字符串
+	 * @returns {object} 解析后的树形结构
+	 * @throws {Error} XML解析失败，包含具体错误详情
+	 */
 	parse: function(code) {
 		const preprocessedCode = this.preprocess(code);
 		const parser = new DOMParser();
@@ -614,11 +615,11 @@ const svgCC = {
 		return this.domToObject(doc.documentElement);
 	},
 
-    /**
-     * 预处理原始代码（补全标签/清理冗余/转义/规范格式）
-     * @param {string} code - 原始代码
-     * @returns {string} 预处理后代码
-     */
+	/**
+	 * 预处理原始SVG/HTML代码（修复结构/清理冗余/转义/规范格式）
+	 * @param {string} code - 原始SVG/HTML代码字符串
+	 * @returns {string} 预处理后的标准代码字符串
+	 */
 	preprocess: function(code) {
 
 		/**
@@ -810,10 +811,11 @@ const svgCC = {
 		}, code);
 	},
 
-    /**
-     * 提取资源（image/img链接、background相关样式）迁移到自定义属性，移除原属性
-     * @param {HTMLElement} rootNode - 根DOM节点
-     */
+	/**
+	 * 提取DOM节点中的资源链接，迁移到自定义属性并移除原生属性
+	 * @param {HTMLElement} rootNode - SVG/HTML根DOM节点
+	 * @returns {void}
+	 */
 	extractAssets: function(rootNode) {
 		const walker = document.createTreeWalker(rootNode, NodeFilter.SHOW_ELEMENT);
 		let node;
@@ -851,11 +853,11 @@ const svgCC = {
 		}
 	},
 
-    /**
-     * 提取并清理样式中的背景属性
-     * @param {string} styleString - 原始样式
-     * @returns {{bgProps: object, cleanedStyle: string}} 背景属性+清理后样式
-     */
+	/**
+	 * 提取样式字符串中的背景属性，清理原样式中的背景相关声明
+	 * @param {string} styleString - 原始CSS样式字符串
+	 * @returns {{bgProps: object, cleanedStyle: string}} 背景属性对象+清理后样式字符串
+	 */
 	processStyle: function(styleString) {
 		// 创建临时元素利用浏览器解析 CSS
 		const tempDiv = document.createElement('div');
@@ -889,11 +891,11 @@ const svgCC = {
 		return { bgProps, cleanedStyle };
 	},
 
-    /**
-     * DOM节点转树形对象
-     * @param {Node} node - DOM节点
-     * @returns {object|null} 树形对象
-     */
+	/**
+	 * 将DOM节点递归转换为自定义树形对象结构
+	 * @param {Node} node - 待转换的DOM节点（元素/文本/注释）
+	 * @returns {object|null} 转换后的树形对象，非有效节点返回null
+	 */
 	domToObject: function(node) {
 		if (node.nodeType === Node.ELEMENT_NODE) {
 			const obj = { tag: node.tagName, attrs: {}, children: [] };
@@ -919,9 +921,9 @@ const svgCC = {
 	// =================================================================
 
 	/**
-	 * 树形结构转回标准SVG/HTML代码（还原自定义属性到原生属性）
-	 * @param {object} tree - 树形结构
-	 * @returns {string} 标准代码
+	 * 将自定义树形结构转回标准SVG/HTML代码（还原自定义属性到原生属性）
+	 * @param {object} tree - 解析后的自定义树形结构
+	 * @returns {string} 标准SVG/HTML代码字符串
 	 */
 	compose: function(tree) {
 		// 创建XML文档环境，维持大小写敏感
@@ -945,12 +947,12 @@ const svgCC = {
 		return xmlString;
 	},
 	
-    /**
-     * 树形对象转DOM节点（还原自定义属性）
-     * @param {Document} doc - XML文档
-     * @param {object} obj - 树形结构
-     * @returns {Node|null} DOM节点
-     */
+	/**
+	 * 将自定义树形对象递归转换为DOM节点（还原自定义资源属性）
+	 * @param {Document} doc - XML文档对象
+	 * @param {object} obj - 待转换的自定义树形对象
+	 * @returns {Node|null} 转换后的DOM节点，非有效对象返回null
+	 */
 	objectToDom: function(doc, obj) {
 		if (!obj) return null;
 		if (obj.tag === 'wenben') return doc.createTextNode(obj.attrs);
@@ -1027,5 +1029,285 @@ const svgCC = {
 			}
 		}
 		return element;
+	},
+
+	// =================================================================
+	// 特征层级分计算函数
+	// =================================================================
+
+	/**
+	 * 解析CSS样式字符串为键值对对象
+	 * @param {string} [styleStr] - 待解析的CSS样式字符串，可选
+	 * @returns {Object} 解析后的CSS样式键值对对象
+	 */
+	parseStyle: function(styleStr) {
+		const styleObj = {};
+		if (!styleStr) return styleObj;
+		styleStr.split(';').forEach(item => {
+			const [key, value] = item.trim().split(':').map(v => v.trim());
+			if (key && value) styleObj[key] = value;
+		});
+		return styleObj;
+	},
+
+	/**
+	 * 计算SVG中所有图片的特征层级分，筛选最高层级图片并生成预加载HTML
+	 * @param {object} tree - 解析后的SVG树形结构
+	 * @param {number} number - 需要筛选的最高层级图片数量
+	 * @returns {object} 层级计算结果，含明细和预加载HTML
+	 */
+	calcLayer: function(tree, number) {
+
+		/**
+		 * SVG容器判断：是否为合法的并列容器（svg/g/foreignObject）
+		 * @param {object} node - 树形结构中的节点对象
+		 * @returns {boolean} 是合法容器返回true，否则返回false
+		 */
+		const isSvgValidContainer = (node) => {
+			if (!node || !node.tag) return false;
+			const tag = node.tag.toLowerCase();
+			return ['svg', 'g', 'foreignObject'].includes(tag);
+		};
+
+		/**
+		 * SVG容器查找：从父节点链中由近到远找最近的合法SVG容器
+		 * @param {object[]} parentChain - 图片节点的所有祖先节点链数组
+		 * @returns {object|undefined} 找到的最近合法容器节点，无则返回undefined
+		 */
+		const findNearestSvgContainer = (parentChain) => {
+			return [...parentChain].reverse().find(isSvgValidContainer);
+		};
+
+		/**
+		 * 透明度判断：数值在0-0.05范围内视为真透明
+		 * @param {string|number} opacityValue - 透明度值（字符串/数字类型）
+		 * @returns {boolean} 符合真透明范围返回true，否则返回false
+		 */
+		const isOpacityMinValue = (opacityValue) => {
+			const opacityNum = parseFloat(opacityValue);
+			return !isNaN(opacityNum) && opacityNum >= 0 && opacityNum <= 0.05;
+		};
+
+		/**
+		 * SVG宽度动画判断：svg直接子节点是否存在width属性的animate动画
+		 * @param {object} svgNode - 树形结构中的SVG节点对象
+		 * @returns {boolean} 存在width动画返回true，否则返回false
+		 */
+		const isSvgWidthAnimate = (svgNode) => {
+			if (!svgNode || svgNode.tag?.toLowerCase() !== 'svg') return false;
+			if (!svgNode.children) return false;
+			for (const child of svgNode.children) {
+				if (child.tag?.toLowerCase() === 'animate' && child.attrs) {
+					const attrName = child.attrs.attributeName?.toLowerCase();
+					if (attrName === 'width') {
+						return true;
+					}
+				}
+			}
+			return false;
+		};
+
+		/**
+		 * 底层特征减分计算：根据style和节点属性计算单一样式的底层减分值
+		 * @param {string} styleStr - 待计算的CSS样式字符串
+		 * @param {object} node - 对应的图片树形节点对象
+		 * @returns {number} 计算后的底层特征总减分值
+		 */
+		const calculateBottomScore = (styleStr, node) => {
+			let score = 0;
+			const s = this.parseStyle(styleStr);
+			// 底层特征1：style内height值为0
+			if (s.height) {
+				const heightStr = s.height.trim();
+				const isZeroHeight = /^0(\s*px|\s*%|\s*rem|\s*em|\s*vh|\s*vw)?$/i.test(heightStr);
+				const heightNum = parseFloat(heightStr);
+				if (!isNaN(heightNum) && heightNum === 0 && isZeroHeight) {
+					score -= 10;
+				}
+			}
+			// 底层特征2：style内opacity真透明
+			if (isOpacityMinValue(s.opacity)) score -= 2;
+			// 底层特征3：属性opacity真透明
+			if (isOpacityMinValue(node?.attrs?.opacity)) score -= 2;
+			return score;
+		};
+
+		/**
+		 * 顶层特征加分计算：根据style字符串计算单一样式的顶层加分值
+		 * @param {string} styleStr - 待计算的CSS样式字符串
+		 * @returns {number} 计算后的顶层特征总加分值
+		 */
+		const calculateTopScore = (styleStr) => {
+			let score = 0;
+			const s = this.parseStyle(styleStr);
+			// 顶层特征1：style内margin-top为非0非px单位的负数
+			if (s.marginTop) {
+				const trimmedMargin = s.marginTop.trim();
+				const negativeMarginReg = /^-([1-9]\d*(\.\d+)?|0\.\d+)(%|\s*rem|\s*em|\s*vh|\s*vw)$/i;
+				if (negativeMarginReg.test(trimmedMargin)) score += 10;
+			}
+			// 顶层特征2：style内transform存在
+			if (s.transform && s.transform !== 'none') score += 5;
+			// 顶层特征3：style内isolation:isolate
+			if (s.isolation === 'isolate') score += 3;
+			// 顶层特征4：style内z-index>0
+			if (s.zIndex) {
+				const zIndexNum = Number(s.zIndex);
+				if (!isNaN(zIndexNum) && zIndexNum > 0) score += 3;
+			}
+			return score;
+		};
+
+		// 初始化全局变量
+		let globalOrder = 0; // 图片全局索引
+		let svgUniqueId = 0; // width动画所在svg的临时id
+		const widthSvgMap = new Map(); // 临时id与svg内部所有图片的映射
+		const allImagesRaw = []; // 所有图片原始信息
+
+		/**
+		 * 第一次遍历收集：收集图片原始信息和宽度动画SVG与图片的映射关系
+		 * @param {object} node - 当前遍历的树形节点对象
+		 * @param {object[]} [parentChain=[]] - 当前节点的祖先节点链数组，默认空数组
+		 * @param {object|null} [parentNode=null] - 当前节点的直接父节点对象，默认null
+		 * @returns {void}
+		 */
+		const traverseCollect = (node, parentChain = [], parentNode = null) => {
+			if (!node) return;
+			// 提取图片链接
+			const imgUrl = node.attrs?.['iftool-src'] || node.attrs?.['iftool-href'] || node.attrs?.['iftool-background'] || ''; 
+			if (imgUrl) {
+				// 收集图片原始信息
+				const imgRaw = {
+					url: imgUrl,
+					node,
+					parentChain,
+					parentNode,
+					globalOrder: globalOrder++,
+					childIndex: parentNode ? parentNode.children.findIndex(c => c === node) : -1
+				};
+				allImagesRaw.push(imgRaw);
+
+				// 收集width动画所在svg与图片的映射关系
+				const svgNodes = [...parentChain, node].reverse().filter(item => item.tag?.toLowerCase() === 'svg');
+				const targetAnimateSvg = svgNodes.find(isSvgWidthAnimate);
+				if (targetAnimateSvg) {
+					// 给width动画所在svg分配临时id
+					if (!targetAnimateSvg.__widthSvgId__) targetAnimateSvg.__widthSvgId__ = ++svgUniqueId;
+					const svgId = targetAnimateSvg.__widthSvgId__;
+					// 找到的图片加入对应svg列表
+					if (!widthSvgMap.has(svgId)) widthSvgMap.set(svgId, []);
+					widthSvgMap.get(svgId).push(imgRaw);
+				}
+			}
+
+			// 深度优先遍历子节点
+			if (node.children) {
+				node.children.forEach(child => traverseCollect(child, [...parentChain, node], node));
+			}
+		};
+
+		traverseCollect(tree);
+		widthSvgMap.forEach(imgList => imgList.sort((a, b) => a.globalOrder - b.globalOrder)); 
+
+		// 第二次遍历：计算特征层级分
+		const imagesDetail = allImagesRaw.map(imgRaw => {
+			const { url, node, parentChain, parentNode, globalOrder, childIndex } = imgRaw;
+			let layer = 20; // 初始特征层级分
+
+			// 合并自身+所有父节点的style
+			const nodeStyle = node.attrs?.style || '';
+			const parentStyles = parentChain.map(p => p.attrs?.style || '');
+			const allStyles = [nodeStyle, ...parentStyles];
+
+			// 底层特征总减分
+			const totalBottomScore = allStyles.reduce((sum, style) => sum + calculateBottomScore(style, node), 0);
+			layer += totalBottomScore;
+
+			// 顶层特征总加分
+			const totalTopScore = allStyles.reduce((sum, style) => sum + calculateTopScore(style), 0);
+			layer += totalTopScore;
+
+			// 并列g/fo场景按顺序加调整分：第一个+0，每下一个+3
+			let gfoScore = 0;
+			const nearestContainer = findNearestSvgContainer(parentChain);
+			if (nearestContainer) {
+				const containerIndex = nearestContainer.parentNode?.children.findIndex(c => c === nearestContainer) || 0;
+				gfoScore = containerIndex * 3;
+			}
+			layer += gfoScore;
+
+			// width动画所在svg内部按顺序加调整分：最后一个+100，每上一个-0.05
+			let animateScore = 0;
+			const svgNodes = [...parentChain, node].reverse().filter(item => item.tag?.toLowerCase() === 'svg');
+			const targetAnimateSvg = svgNodes.find(isSvgWidthAnimate);
+			if (targetAnimateSvg) {
+				const svgId = targetAnimateSvg.__widthSvgId__;
+				const svgImgList = widthSvgMap.get(svgId) || [];
+				const imgIndex = svgImgList.findIndex(item => item.globalOrder === globalOrder);
+				if (imgIndex > -1) {
+					animateScore = parseFloat((100 - imgIndex * 0.05).toFixed(1));
+				}
+			}
+			layer += animateScore;
+
+			// 全局按顺序加调整分：第一个+5，每下一个-0.01（单篇图文上限500张图，无缝排版也有最高特征层级分）
+			let globalScore = 0;
+			globalScore = (500 - globalOrder) * 0.01;
+			layer += globalScore;
+
+			// 格式化最终特征层级分
+			layer = parseFloat(layer.toFixed(2));
+
+			return {
+				url, // 图片链接
+				layer, // 特征层级总分
+				globalOrder, //全局索引
+				totalBottomScore, // 底层特征分
+				totalTopScore, // 顶层特征分
+				gfoScore, // 并列gfo顺序调整分
+				animateScore, // width动画顺序调整分
+				globalScore // 全局顺序调整分
+			};
+		});
+
+		// 特征层级分从大到小排序
+		let topLayerImages = [];
+		if (imagesDetail.length > 0) {
+			const sortedImages = imagesDetail.sort((a, b) => {
+				if (b.layer !== a.layer) return b.layer - a.layer;
+				return a.globalOrder - b.globalOrder;
+			});
+			topLayerImages = sortedImages.slice(0, number).map(img => img.url); // 取出前number张图片的链接
+		}
+
+		// 生成预加载HTML片段
+		const finalHtml = `<section class="用于提前加载的图片组，不影响画面内容，上传后不保留本段注释" style="display: block; height: 0px !important; margin-top: 0px !important; margin-bottom: 0px !important; padding-left: 1000px !important;">
+			<svg viewBox="0 0 1 1">
+				${topLayerImages.map(url => `<g><foreignObject x="0" y="0" width="1" height="1"><svg style="background-image: url('${url}'); background-size: cover; background-repeat: no-repeat;"></svg></foreignObject></g>`).join('')}
+			</svg>
+		</section>`;
+
+		// 调试日志
+		// console.log('=== 所有图片层级明细 ===');
+		// imagesDetail.forEach(img => {
+		// 	console.log(`索引：${img.globalOrder} | 链接：${img.url.slice(0, 50)}... | 层级：${img.layer} ｜ 底层特征分：${img.totalBottomScore} ｜ 顶层特征分：${img.totalTopScore} ｜ 并列gfo顺序分：${img.gfoScore} ｜ width动画顺序分：${img.animateScore} ｜ 全局顺序分：${img.globalScore}`);
+		// });
+
+		/**
+		 * 清理SVG节点的临时属性，避免污染原始树形结构
+		 * @param {object} node - 树形结构中的节点对象
+		 * @returns {void}
+		 */
+		const clearSvgTempAttr = (node) => {
+			if (!node) return;
+			if (node.__widthSvgId__) delete node.__widthSvgId__;
+			if (node.children) node.children.forEach(clearSvgTempAttr);
+		};
+		clearSvgTempAttr(tree);
+
+		return {
+			imagesDetail: imagesDetail, // 完整层级明细
+			finalHtml: finalHtml // 预加载HTML片段
+		};
 	}
 };
