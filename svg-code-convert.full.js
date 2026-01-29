@@ -2,7 +2,6 @@
  * @file SVG代码转换工具
  * @version 1.0.0
  * @description 基于微信公众号平台规则和渲染特性，实现SVG交互图文 <svg> <img> <image> 三种格式相互转换
- * @author qiruo
  * @copyright Copyright (c) 2026 上海意符文化传媒有限公司
  * @license MIT License
  * @homepage https://www.ifsvgtool.com/
