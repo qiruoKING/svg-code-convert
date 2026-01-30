@@ -14,13 +14,13 @@
 #### 方式1：本地文件引入
 将 svg-code-convert.js 放入项目目录，通过 script 标签引入：
 ```html
-<script src="svg-code-convert.full.js"></script>
+<script src="svg-code-convert.min.js"></script>
 ```
 
 #### 方式2：CDN引入（推荐）
 使用 jsDelivr 加载 GitHub 上的文件：
 ```html
-<script src="https://cdn.jsdelivr.net/gh/qiruoKING/svg-code-convert@main/svg-code-convert.full.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/qiruoKING/svg-code-convert@main/svg-code-convert.min.js"></script>
 ```
 
 ### 3.2 核心使用流程（三步法：解析→转换→合成）
@@ -55,12 +55,13 @@ const resultCode = svgCC.compose(tree);
 ```
 
 #### 3.2.4 三步法完整代码演示
-引入 svg-code-convert 之后，在用到转换处理的部分添加：
+引入 svg-code-convert.js 之后，在用到转换处理的部分添加：
 ```javascript
 async function convert(code, type) {
 	// 第一步：解析
 	const tree = svgCC.parse(code);
 	const isImgConvertChecked = document.getElementById('imgConvertCheckbox').checked; // 是否转换img元素（防止点开大图/长按扫描失效）
+
 	// 第二步：转化
 	if (type === 'image') {
 		svgCC.fosvg2image(tree);
@@ -78,6 +79,7 @@ async function convert(code, type) {
 			await svgCC.img2svg(tree);
 		}
 	}
+
 	// 第三步：合成
 	const result = svgCC.compose(tree);
 	return result; // 非指定type则仅执行解析-合成，完成代码优化
@@ -90,9 +92,14 @@ async function convert(code, type) {
 async function convert(code, type) {
 	// 第一步：解析
 	const tree = svgCC.parse(code);
-	const topLayer = svgCC.calcLayer(tree, 3); // 在解析后、转化前获取特征层级分最高的三张图片链接的预加载HTML
-	// console.log('完整层级明细：', topLayer.imagesDetail) // 调试日志
+	let topLayer = { imagesDetail: '', finalHtml: '' }; // 预加载默认值
+	const isPreloadHtmlChecked = document.getElementById('preloadHtmlCheckbox').checked; // 是否预加载流程
+	if (isPreloadHtmlChecked) {
+		topLayer = svgCC.calcLayer(tree, 5); // 解析后、转化前获取特征层级分最高的5张图片链接的预加载值
+		// console.log('完整层级明细：', topLayer.imagesDetail) // 调试日志
+	}
 	const isImgConvertChecked = document.getElementById('imgConvertCheckbox').checked; // 是否转换img元素（防止点开大图/长按扫描失效）
+
 	// 第二步：转化
 	if (type === 'image') {
 		svgCC.fosvg2image(tree);
@@ -110,6 +117,7 @@ async function convert(code, type) {
 			await svgCC.img2svg(tree);
 		}
 	}
+
 	// 第三步：合成
 	const result = topLayer.finalHtml + svgCC.compose(tree); // 拼接预加载HTML
 	return result; // 非指定type则仅执行解析-合成，完成代码优化
@@ -232,7 +240,6 @@ async function convert(code, type) {
 6. 预加载使用：`calcLayer`生成的预加载HTML片段仅需拼接至公众号图文代码头部，其样式为隐藏状态，不会影响页面布局和内容渲染
 
 ## 6. 开源信息
-- 作者：qiruo
 - 版本：1.0.0
 - 许可证：MIT License
 - 项目主页：https://www.ifsvgtool.com/
