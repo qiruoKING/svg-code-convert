@@ -1283,7 +1283,7 @@ const svgCC = {
 		// 生成预加载HTML片段
 		const finalHtml = `<section class="用于提前加载的图片组，不影响画面内容，上传后不保留本段注释" style="display: block; height: 0px !important; margin-top: 0px !important; margin-bottom: 0px !important; padding-left: 1000px !important;">
 			<svg viewBox="0 0 1 1">
-				${topLayerImages.map(url => `<g><foreignObject x="0" y="0" width="1" height="1"><svg style="background-image: url('${url}'); background-size: cover; background-repeat: no-repeat;"></svg></foreignObject></g>`).join('')}
+				${topLayerImages.map(url => `<g><foreignObject x="0" y="0" width="1" height="1"><svg viewBox="0 0 1 1" style="background-image: url('${url}'); background-size: cover; background-repeat: no-repeat;"></svg></foreignObject></g>`).join('')}
 			</svg>
 		</section>`;
 
