@@ -2,6 +2,7 @@
  * @file SVG代码转换工具
  * @version 1.0.0
  * @description 基于微信公众号平台规则和渲染特性，实现SVG交互图文 <svg> <img> <image> 三种格式相互转换
+ * @author qiruo
  * @copyright Copyright (c) 2026 上海意符文化传媒有限公司
  * @license MIT License
  * @homepage https://www.ifsvgtool.com/
@@ -298,7 +299,7 @@ const svgCC = {
 	image2img: function(tree) {
 		// 遍历收集目标节点
 		this.traverseHtmlTree(tree, (node, parentInfo) => {
-			// 找到image + 内容为空 + 有iftool-src属性 + 父节点有效
+			// 找到image + image内容为空 + image有href属性 + 父节点有效
 			if (node.tag === 'image' && node.children.length === 0 && node.attrs?.['iftool-href'] && parentInfo?.parentNode?.children) {
 				const preservedAttrs = this.filterPreservedAttrs(node.attrs); // 白名单属性过滤
 
@@ -351,7 +352,7 @@ const svgCC = {
 	image2svg: function(tree) {
 		// 遍历收集目标节点
 		this.traverseHtmlTree(tree, (node, parentInfo) => {
-			// 找到image + 内容为空 + 有iftool-href属性 + 父节点有效
+			// 找到image + image内容为空 + image有href属性 + 父节点有效
 			if (node.tag === 'image' && node.children.length === 0 && node.attrs?.['iftool-href'] && parentInfo?.parentNode?.children) {
 				const preservedAttrs = this.filterPreservedAttrs(node.attrs); // 白名单属性过滤
 
