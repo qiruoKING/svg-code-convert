@@ -1,6 +1,6 @@
 /**
  * @file SVG图片特征层级检测工具
- * @version 1.0.2
+ * @version V2
  * @description 量化分析微信公众号SVG交互图文内图片的视觉特征层级，筛选最顶层图片并生成预加载HTML
  * @copyright Copyright (c) 2026 上海意符文化传媒有限公司
  * @license MIT License
