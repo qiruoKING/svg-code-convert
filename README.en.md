@@ -2,7 +2,7 @@
 
 > A conversion engine for interactive SVG content in WeChat Official Account articles: three-way conversion between `<svg>` `<img>` `<image>`, quantitative image-layer scoring, and automatic preload-code generation.
 
-[![Version](https://img.shields.io/badge/version-1.0.2-10c366)](https://www.ifsvgtool.com/)
+[![Version](https://img.shields.io/badge/version-V2-10c366)](https://www.ifsvgtool.com/)
 [![License](https://img.shields.io/badge/license-MIT-10c366)](https://github.com/qiruoKING/svg-code-convert/blob/main/LICENSE)
 [![Demo](https://img.shields.io/badge/demo-online-10c366)](https://www.ifsvgtool.com/code-converter)
 [![Environment](https://img.shields.io/badge/environment-Browser-10c366)](https://www.ifsvgtool.com/code-converter)
@@ -252,7 +252,7 @@ Each entry of `imagesDetail` contains: `url` (image URL), `layer` (total score),
 
 ## 7. Open Source Info
 
-- Version: 1.0.2
+- Version: V2
 - License: [MIT License](LICENSE)
 - Homepage: https://www.ifsvgtool.com/
 - Live Demo: https://www.ifsvgtool.com/code-converter
