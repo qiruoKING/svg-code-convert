@@ -2,7 +2,7 @@
 
 > 面向微信公众号图文场景的 SVG 交互代码转换引擎：`<svg>` `<img>` `<image>` 三态互转 + 图片特征层级量化分析 + 预加载代码自动生成。
 
-[![Version](https://img.shields.io/badge/version-1.0.2-10c366)](https://www.ifsvgtool.com/)
+[![Version](https://img.shields.io/badge/version-V2-10c366)](https://www.ifsvgtool.com/)
 [![License](https://img.shields.io/badge/license-MIT-10c366)](https://github.com/qiruoKING/svg-code-convert/blob/main/LICENSE)
 [![Demo](https://img.shields.io/badge/demo-在线体验-10c366)](https://www.ifsvgtool.com/code-converter)
 [![Environment](https://img.shields.io/badge/environment-Browser-10c366)](https://www.ifsvgtool.com/code-converter)
@@ -252,7 +252,7 @@ async function convert(code, type) {
 
 ## 7. 开源信息
 
-- 版本：1.0.2
+- 版本：V2
 - 许可证：[MIT License](LICENSE)
 - 项目主页：https://www.ifsvgtool.com/
 - 在线演示：https://www.ifsvgtool.com/code-converter
